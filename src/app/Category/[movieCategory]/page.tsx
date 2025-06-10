@@ -1,40 +1,30 @@
 "use client";
 import { getCategory } from "@/services/getCategory";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { Movie } from "@/types";
 import { MovieCard } from "@/Components/MovieCard";
-import {
-  Pagination,
-  PaginationContent,
+import { Button } from "@/Components/ui/button";
+import { Pagination , PaginationContent,
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { Button } from "@/Components/ui/button";
+  PaginationPrevious,} from "@/Components/ui/pagination";
 
 interface CategoryResponse {
   results: Movie[];
   total_pages: number;
 }
 
-export default function CategoryPage() {
+export default function CategoryPage({params}: { params: Promise<{ movieCategory: string }> }) {
+  const { movieCategory } = use(params);
   const [categoryData, setCategoryData] = useState<CategoryResponse>({
     results: [],
     total_pages: 0,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const router = useRouter();
-  let { movieCategory } = router.query;
-
-  if (Array.isArray(movieCategory)) {
-    movieCategory = movieCategory[0];
-  }
 
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
 
@@ -46,7 +36,7 @@ export default function CategoryPage() {
       try {
         const data = await getCategory(movieCategory, page);
         setCategoryData(data);
-      } catch (err) {
+      } catch (error){
         setError("Failed to load data");
       } finally {
         setLoading(false);

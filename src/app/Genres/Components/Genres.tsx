@@ -2,22 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { parseAsArrayOf, parseAsInteger, useQueryState } from "nuqs";
 import { getGenres } from "@/services/getGenres";
 import { ArrowRight } from "lucide-react";
 import { SkeletonCard } from "../../../Components/Skelton";
 import { Button } from "../../../Components/ui/button";
 import { Genre } from "@/types";
+import { parseAsArrayOf, parseAsInteger, useQueryState } from "nuqs";
 
 export function Genres() {
   const router = useRouter();
   const [genres, setGenres] = useState<Genre[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // const [genreIds, setGenreIds] = useQueryState(
-  //   "genreIds",
-  //   parseAsArrayOf(parseAsInteger).withDefault([])
-  // );
+  const [genreIds, setGenreIds] = useQueryState(
+    "genreIds",
+    parseAsArrayOf(parseAsInteger).withDefault([])
+  );
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -32,24 +32,24 @@ export function Genres() {
     fetchGenres();
   }, []);
 
-  // const toggleGenre = (id: number, name: string) => {
-  //   const isSelected = genreIds.includes(id);
-  //   const updatedGenreIds = isSelected
-  //     ? genreIds.filter((genreId) => genreId !== id)
-  //     : [...genreIds, id];
+  const toggleGenre = (id: number, name: string) => {
+    const isSelected = genreIds.includes(id);
+    const updatedGenreIds = isSelected
+      ? genreIds.filter((genreId) => genreId !== id)
+      : [...genreIds, id];
 
-  //   setGenreIds(updatedGenreIds);
+    setGenreIds(updatedGenreIds);
 
-  //   const selectedNames = genres
-  //     .filter((genre) => updatedGenreIds.includes(genre.id))
-  //     .map((genre) => genre.name);
+    const selectedNames = genres
+      .filter((genre) => updatedGenreIds.includes(genre.id))
+      .map((genre) => genre.name);
 
-  //   router.push(
-  //     `/genres?genreId=${updatedGenreIds.join(",")}&name=${selectedNames.join(
-  //       ", "
-  //     )}`
-  //   );
-  // };
+    router.push(
+      `/genres?genreId=${updatedGenreIds.join(",")}&name=${selectedNames.join(
+        ", "
+      )}`
+    );
+  };
 
   return (
     <div className="mx-auto ml-2">
@@ -58,7 +58,7 @@ export function Genres() {
       </h2>
 
       <div className="flex flex-wrap gap-3 max-w-110">
-        {/* {loading
+        {loading
           ? Array.from({ length: 8 }).map((_, index) => (
               <SkeletonCard key={index} />
             ))
@@ -79,7 +79,7 @@ export function Genres() {
                   <ArrowRight className="h-3" />
                 </Button>
               );
-            })} */}
+            })}
       </div>
     </div>
   );

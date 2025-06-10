@@ -30,19 +30,12 @@ interface GenreData {
 
 export default function CategorMorePage() {
   const router = useRouter();
-
-  // query параметрууд Next.js-д string | string[] | undefined байна
   const { genreId, name } = router.query as { genreId?: string; name?: string };
-
-  // genre state-ийн анхны утга null байж болно, эсвэл хоосон объект байж болно
   const [genre, setGenre] = useState<GenreData | null>(null);
-
-  // page-г query state-аас авна, default 1
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
 
   useEffect(() => {
     if (page < 1) setPage(1);
-
     const fetchData = async () => {
       if (!genreId) return;
       const data = await getGenreId(genreId, page);

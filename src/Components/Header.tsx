@@ -15,21 +15,17 @@ const Header: React.FC = () => {
             <span className="font-bold italic text-lg">Movie Z</span>
           </div>
         </Link>
-
         <div className="flex items-center gap-4">
           <HeadGenre />
-
           <div className="relative w-[379px] h-9 sm:block hidden">
             <SearchInput />
           </div>
         </div>
-
-        <div className="flex gap-4">
+        <div className="flex gap-4 ">
           <ModeToggle />
         </div>
       </div>
     </header>
   );
 };
-
 export default Header;

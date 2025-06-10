@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Dialog, DialogTrigger, DialogContent } from "./ui/dialog";
 import { SkeletonCard } from "../../../../Components/Skelton";
+import Trailer from "@/Components/Trailer";
 
 export const MovieFrame = ({ movie, poster_path, backdrop_path, id }) => {
   const [video, setVideo] = useState(null);

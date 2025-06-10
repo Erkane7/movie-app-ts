@@ -1,15 +1,24 @@
-import { useEffect, useState } from "react";
-import { Button } from "../../../../Components/ui/buttons";
-import { useRouter } from "next/router";
-import { SkeletonCard } from "../../../../Components/Skelton";
+"use client";
 
-export const MovieDescription = ({ movie, id }) => {
-  const [cast, setCast] = useState([]);
-  const [director, setDirector] = useState([]);
-  const [writer, setWriter] = useState([]);
-  const [loading, setLoading] = useState(false);
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; 
+import { SkeletonCard } from "../../../../Components/Skelton";
+import { Button } from "@/Components/ui/button";
+import { Movie, CastMember, CrewMember } from "@/types"; 
+
+interface Props {
+  movie: Movie;
+  id: string;
+}
+
+export const MovieDescription: React.FC<Props> = ({ movie, id }) => {
+  const [cast, setCast] = useState<CastMember[]>([]);
+  const [director, setDirector] = useState<CrewMember[]>([]);
+  const [writer, setWriter] = useState<CrewMember[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
+
   const router = useRouter();
-  const [selectedGenres, setSelectedGenres] = useState([]);
 
   const getMovieDescription = async () => {
     setLoading(true);
@@ -26,15 +35,15 @@ export const MovieDescription = ({ movie, id }) => {
       );
 
       const data = await response.json();
-      setCast(data.cast);
+      setCast(data.cast || []);
 
-      const directors = data.crew?.filter(
-        (person) => person.job === "Director"
+      const directors = (data.crew || []).filter(
+        (person: CrewMember) => person.job === "Director"
       );
       setDirector(directors);
 
-      const writers = data.crew?.filter(
-        (person) => person.department === "Writing"
+      const writers = (data.crew || []).filter(
+        (person: CrewMember) => person.department === "Writing"
       );
       setWriter(writers);
     } catch (error) {
@@ -44,14 +53,13 @@ export const MovieDescription = ({ movie, id }) => {
     }
   };
 
-  const toggleGenre = (id, name) => {
+  const toggleGenre = (genreId: number, name: string) => {
     setSelectedGenres((prev) => {
-      const updatedGenres = prev.includes(id)
-        ? prev.filter((prevId) => prevId !== id)
-        : [...prev, id];
+      const updatedGenres = prev.includes(genreId)
+        ? prev.filter((id) => id !== genreId)
+        : [...prev, genreId];
 
       router.push(`/genres?genreId=${updatedGenres.join(",")}&name=${name}`);
-
       return updatedGenres;
     });
   };

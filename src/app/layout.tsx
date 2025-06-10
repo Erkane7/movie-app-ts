@@ -5,6 +5,7 @@ import Header from "@/Components/Header";
 import Footer from "@/Components/Footer";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { type ReactNode } from "react";
+import { ThemeProvider } from "next-themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,13 +28,17 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en">
+  <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      >    
+       <NuqsAdapter>
+        <ThemeProvider>
         <Header />
-        <NuqsAdapter>{children}</NuqsAdapter>
+        {children}
         <Footer />
+        </ThemeProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );
