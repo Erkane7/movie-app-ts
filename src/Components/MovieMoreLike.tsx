@@ -1,10 +1,9 @@
 import { ArrowRight } from "lucide-react";
 import { MovieCard } from "./MovieCard";
 import { useEffect, useState } from "react";
-import { getMoreMovies } from "@/services/getMoremovies";
 import Link from "next/link";
 import { SkeletonCard } from "./Skelton";
-
+import { getMoreMovies } from "@/services/getMoreMovies";
 export const MoreLikeMovie = ({ id }) => {
   const [moreLikeMovie, setMoreLikeMovie] = useState([]);
   const [loading, setLoading] = useState(false);
